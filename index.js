@@ -32,6 +32,10 @@ app.get('/', (req, res)=>{
     res.json({message: 'Hello world.'});
 });
 
+app.get('/', (req, res)=>{
+    res.redirect('/user/login');
+});
+
 mongoose.connect(URI_MONGOOSE);
 mongoose.connection.once('open', ()=>{
     console.log('Mongo client started');
