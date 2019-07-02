@@ -1,0 +1,1 @@
+exports.URI_MONGOOSE =  'mongodb://localhost/project_0106';

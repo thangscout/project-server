@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Information page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+    crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title"><%=infoUser.fullname%></h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><%=infoUser.email%></p>
+                    </div>
+                </div>
+                <div class="card mt-4" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title">Bạn có thể biết</h5>
+                    </div>
+                    <%if(listUser){%>
+                        <%if(listUser.length > 0){%>
+                            <ul class="list-group list-group-flush">
+                                <%listUser.forEach(userGuest =>{%>
+                                    <li class="list-group-item">
+                                        <%=userGuest.fullname%> | <%=userGuest.email%>
+                                        <%if(infoUser.friendsRequest.includes(userGuest._id.toString())){%>
+                                            <a href="/user/add-friend/<%= userGuest._id %>">
+                                                <button type="submit" class="btn btn-danger btn-sm mt-2">Hoàn tác</button>
+                                            </a>
+                                        <%}else{%>
+                                            <br>
+                                            <a href="/user/add-friend/<%= userGuest._id %>">
+                                                <button type="submit" class="btn btn-primary btn-sm mt-2">Kết bạn</button>
+                                            </a>
+                                        <%}%>
+                                    </li>
+                                <%})%>
+                            </ul>
+                        <%}%>
+                    <%}%>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title">Danh sách bạn</h5>
+                    </div>
+                    <%if(infoUser.friends){%>
+                        <%if(infoUser.friends.length > 0){%>
+                            <ul class="list-group list-group-flush">
+                                <%infoUser.friends.forEach(userGuest =>{%>
+                                    <li class="list-group-item"><%=userGuest.fullname%> | <%=userGuest.email%></li>
+                                <%})%>
+                            </ul>
+                        <%}else{%>
+                            <span style="padding: .75rem 1.25rem">Chưa có bạn bè(0)</span>
+                        <%}%>
+                    <%}%>
+                    </ul>
+                </div>
+            </div>
+        </div>        
+    </div>
+</body>
+</html>
