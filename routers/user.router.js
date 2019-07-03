@@ -21,7 +21,6 @@ router.get('/info', async (req, res)=>{
         const infoUser = await USER_MODEL.findOne({email})
             .populate('guestRequest')
             .populate('friends');
-
         if(!infoUser) res.json({error: true, message: 'CANNOT_GET_USER'});
 
         /**
@@ -89,7 +88,40 @@ router.get('/remove-request/:userReceiveRemoveRequestID', async (req, res) =>{
     } catch (error) {
         res.json({ error: true, message: error.message });
     }
-})
+});
+
+router.get('/confirm-friend/:userBeConfirmedID', async (req, res)=>{
+    try {
+        const { email } = req.session; // user current
+        const { userBeConfirmedID} = req.params; // user be comfirm
+        
+        if(!ObjectId.isValid(userBeConfirmedID))
+            res.json({error: true, message: error.message});
+        
+        /**
+         * User current
+         */
+        let infoMainUserAfterUpdate = await USER_MODEL.findOneAndUpdate({ email }, {
+            $pull: { guestRequest: userBeConfirmedID },
+            $addToSet: { friends : userBeConfirmedID }
+        }, { new: true });
+
+        /**
+         * User be confirm
+         */
+        let { _id: userMainID } = infoMainUserAfterUpdate;
+        let infoUserBeConfirmedAfterUpdate = await USER_MODEL.findByIdAndUpdate(userBeConfirmedID, {
+            $pull: { friendsRequest: userMainID },
+            $addToSet: { friends: userMainID}
+        }, { new: true });
+
+        if( !infoUserBeConfirmedAfterUpdate || !infoMainUserAfterUpdate)
+            res.json({ error: true, message: 'CANNOT_UPDATE'});
+        res.redirect('/user/info');
+    } catch (error) {
+        res.json({ user: true, message: error.message});
+    }
+});
 
 router.post('/register', async (req, res)=>{
     try {
@@ -132,7 +164,4 @@ router.post('/login', async (req, res)=>{
         res.json({error: true, message: error.message});
     }
 });
-
-
-
 exports.USER_ROUTTER = router;

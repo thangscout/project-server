@@ -29,24 +29,28 @@
                         <%if(listUser.length > 0){%>
                             <ul class="list-group list-group-flush">
                                 <%listUser.forEach(userGuest =>{%>
-                                    <li class="list-group-item">
-                                        <%=userGuest.fullname%> | <%=userGuest.email%>
-                                        <%if(infoUser.friendsRequest.includes(userGuest._id.toString())){%>
-                                            <br>
-                                            <a href="/user/remove-request/<%= userGuest._id %>">
-                                                <button type="button" class="btn btn-danger btn-sm mt-2">Hoàn tác</button>
-                                            </a>
-                                        <%}else{%>
-                                            <br>
-                                            <a href="/user/add-friend/<%= userGuest._id %>">
-                                                <button type="button" class="btn btn-primary btn-sm mt-2">Kết bạn</button>
-                                            </a>
-                                        <%}%>
-                                    </li>
+                                    <%var arrObjIDFriends = infoUser.friends.map(item => item._id.toString())%>
+                                    <%if(!arrObjIDFriends.includes(userGuest._id.toString())){%>
+                                        <li class="list-group-item">
+                                            <%=userGuest.fullname%> | <%=userGuest.email%>
+                                            <%if(infoUser.friendsRequest.includes(userGuest._id.toString())){%>
+                                                <br>
+                                                <a href="/user/remove-request/<%= userGuest._id %>">
+                                                    <button type="button" class="btn btn-danger btn-sm mt-2">Hoàn tác</button>
+                                                </a>
+                                            <%}else{%>
+                                                <br>
+                                                <a href="/user/add-friend/<%= userGuest._id %>">
+                                                    <button type="button" class="btn btn-primary btn-sm mt-2">Kết bạn</button>
+                                                </a>
+                                            <%}%>
+                                        </li>
+                                    <%}%>                                    
                                 <%})%>
                             </ul>
                         <%}%>
                     <%}%>
+                    </ul>
                 </div>
             </div>
             <div class="col-md-4">
