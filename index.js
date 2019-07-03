@@ -27,11 +27,6 @@ app.use(expressSession({
 
 app.use('/user', USER_ROUTTER);
 
-
-app.get('/', (req, res)=>{
-    res.json({message: 'Hello world.'});
-});
-
 app.get('/', (req, res)=>{
     res.redirect('/user/login');
 });

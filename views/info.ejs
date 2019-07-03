@@ -30,7 +30,8 @@
                             <ul class="list-group list-group-flush">
                                 <%listUser.forEach(userGuest =>{%>
                                     <%var arrObjIDFriends = infoUser.friends.map(item => item._id.toString())%>
-                                    <%if(!arrObjIDFriends.includes(userGuest._id.toString())){%>
+                                    <%var arrObjIDGuestRequest = infoUser.guestRequest.map(item => item._id.toString())%>
+                                    <%if(!arrObjIDFriends.includes(userGuest._id.toString()) && !arrObjIDGuestRequest.includes(userGuest._id.toString())){%>
                                         <li class="list-group-item">
                                             <%=userGuest.fullname%> | <%=userGuest.email%>
                                             <%if(infoUser.friendsRequest.includes(userGuest._id.toString())){%>
@@ -50,7 +51,6 @@
                             </ul>
                         <%}%>
                     <%}%>
-                    </ul>
                 </div>
             </div>
             <div class="col-md-4">
@@ -61,14 +61,22 @@
                     <%if(infoUser.guestRequest){%>
                         <%if(infoUser.guestRequest.length > 0){%>
                             <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Bạn có <b><%= infoUser.guestRequest.length %></b> yêu cầu kết bạn</li>
                                 <%infoUser.guestRequest.forEach(userGuest =>{%>
                                     <li class="list-group-item">
                                         <%=userGuest.fullname%> | <%=userGuest.email%>
+                                        <br>
+                                        <a href="/user/confirm-friend/<%= userGuest._id %>">
+                                            <button type="button" class="btn btn-success btn-sm mt-2">Xác nhận</button>
+                                        </a>
+                                        <a class="ml-3" href="/user/decline-friend/<%= userGuest._id %>">
+                                            <button type="button" class="btn btn-warning btn-sm mt-2">Từ chối</button>
+                                        </a>
                                     </li>
                                 <%})%>
                             </ul>
                         <%}else{%>
-                            <span style="padding: .75rem 1.25rem">Chưa có yêu cầu(0)</span>
+                            <span style="padding: .75rem 1.25rem">Chưa có yêu cầu</span>
                         <%}%>
                     <%}%>
                     </ul>
@@ -87,7 +95,7 @@
                                 <%})%>
                             </ul>
                         <%}else{%>
-                            <span style="padding: .75rem 1.25rem">Chưa có bạn bè(0)</span>
+                            <span style="padding: .75rem 1.25rem">Chưa có bạn bè</span>
                         <%}%>
                     <%}%>
                 </div>

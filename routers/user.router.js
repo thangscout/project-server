@@ -55,7 +55,7 @@ router.get('/add-friend/:userReceiveAddFriendID', async (req, res)=>{
         }, {new: true});
 
         if(!infoSenderAfterUpdate || !infoReceiveAfterUpdate)
-            res.json({error: true, message: 'UPDATE_ERROR'});
+            return res.json({error: true, message: 'UPDATE_ERROR'});
         
         // res.json({ infoSender: infoSenderAfterUpdate, infoReceiver: infoReceiveAfterUpdate });
         res.redirect('/user/info');
@@ -96,7 +96,7 @@ router.get('/confirm-friend/:userBeConfirmedID', async (req, res)=>{
         const { userBeConfirmedID} = req.params; // user be comfirm
         
         if(!ObjectId.isValid(userBeConfirmedID))
-            res.json({error: true, message: error.message});
+            res.json({error: true, message: 'PARAM VALID'});
         
         /**
          * User current
@@ -115,11 +115,34 @@ router.get('/confirm-friend/:userBeConfirmedID', async (req, res)=>{
             $addToSet: { friends: userMainID}
         }, { new: true });
 
-        if( !infoUserBeConfirmedAfterUpdate || !infoMainUserAfterUpdate)
-            res.json({ error: true, message: 'CANNOT_UPDATE'});
+        if( !infoMainUserAfterUpdate || !infoUserBeConfirmedAfterUpdate )
+            return res.json({ error: true, message: 'CANNOT_UPDATE'});
+
         res.redirect('/user/info');
     } catch (error) {
         res.json({ user: true, message: error.message});
+    }
+});
+
+router.get('/decline-friend/:userBeDeclineID', async (req, res)=>{
+    try {
+        const { email } = req.session;
+        const { userBeDeclineID } = req.params;
+    
+        if( !ObjectId.isValid( userBeDeclineID ))
+            res.json({ error: true, message: 'PARAM_VALID'});
+        
+        let infoUserCurrentAfterUpdate = await USER_MODEL.findOneAndUpdate({ email }, {
+            $pull: { guestRequest: userBeDeclineID}
+        }, { new: true });
+    
+        if( !infoUserCurrentAfterUpdate)
+            return res.json({ error: true, message: 'CANNOT_UPDATE'});
+    
+        res.redirect('/user/info');
+        
+    } catch (error) {
+        res.json({ error: true, message: error.message });
     }
 });
 
