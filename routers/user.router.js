@@ -146,6 +146,33 @@ router.get('/decline-friend/:userBeDeclineID', async (req, res)=>{
     }
 });
 
+router.get('/remove-friend/:userBeRemoveID', async (req, res)=>{
+    try {
+        const { email } = req.session;
+        const { userBeRemoveID } = req.params;
+    
+        if( !ObjectId.isValid( userBeRemoveID ))
+            res.json({ error: true, message: 'PARAM_VALID'});
+        
+        let infoUserCurrentAfterUpdate = await USER_MODEL.findOneAndUpdate({ email }, {
+            $pull: { friends: userBeRemoveID }
+        }, { new: true });
+        
+        let { _id: userCurrentID } = infoUserCurrentAfterUpdate;
+        let infoUserBeRemoveAfterUpdate = await USER_MODEL.findByIdAndUpdate(userBeRemoveID, {
+            $pull: { friends: userCurrentID }
+        }, { new: true });
+    
+        if( !infoUserCurrentAfterUpdate || !infoUserBeRemoveAfterUpdate)
+            return res.json({ error: true, message: 'CANNOT_UPDATE'});
+        
+        res.redirect('/user/info');
+
+    } catch (error) {
+        res.json({ error: true, message: error.message });
+    }
+});
+
 router.post('/register', async (req, res)=>{
     try {
         const { fullname, email, password} = req.body;

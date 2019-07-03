@@ -36,14 +36,10 @@
                                             <%=userGuest.fullname%> | <%=userGuest.email%>
                                             <%if(infoUser.friendsRequest.includes(userGuest._id.toString())){%>
                                                 <br>
-                                                <a href="/user/remove-request/<%= userGuest._id %>">
-                                                    <button type="button" class="btn btn-danger btn-sm mt-2">Hoàn tác</button>
-                                                </a>
+                                                <a class="btn btn-danger btn-sm mt-2" href="/user/remove-request/<%= userGuest._id %>">Hoàn tác</a>
                                             <%}else{%>
                                                 <br>
-                                                <a href="/user/add-friend/<%= userGuest._id %>">
-                                                    <button type="button" class="btn btn-primary btn-sm mt-2">Kết bạn</button>
-                                                </a>
+                                                <a class ="btn btn-primary btn-sm mt-2" href="/user/add-friend/<%= userGuest._id %>">Kết bạn</a>
                                             <%}%>
                                         </li>
                                     <%}%>                                    
@@ -66,12 +62,8 @@
                                     <li class="list-group-item">
                                         <%=userGuest.fullname%> | <%=userGuest.email%>
                                         <br>
-                                        <a href="/user/confirm-friend/<%= userGuest._id %>">
-                                            <button type="button" class="btn btn-success btn-sm mt-2">Xác nhận</button>
-                                        </a>
-                                        <a class="ml-3" href="/user/decline-friend/<%= userGuest._id %>">
-                                            <button type="button" class="btn btn-warning btn-sm mt-2">Từ chối</button>
-                                        </a>
+                                        <a class="btn btn-success btn-sm mt-2" href="/user/confirm-friend/<%= userGuest._id %>">Xác nhận</a>
+                                        <a class="btn btn-warning btn-sm mt-2 ml-3" href="/user/decline-friend/<%= userGuest._id %>">Từ chối</a>
                                     </li>
                                 <%})%>
                             </ul>
@@ -91,7 +83,11 @@
                         <%if(infoUser.friends.length > 0){%>
                             <ul class="list-group list-group-flush">
                                 <%infoUser.friends.forEach(userGuest =>{%>
-                                    <li class="list-group-item"><%=userGuest.fullname%> | <%=userGuest.email%></li>
+                                    <li class="list-group-item">
+                                        <%=userGuest.fullname%> | <%=userGuest.email%>
+                                        <br>
+                                        <a class="btn btn-dark btn-sm mt-2" href="/user/remove-friend/<%= userGuest._id %>">Huỷ kết bạn</a>
+                                    </li>
                                 <%})%>
                             </ul>
                         <%}else{%>
