@@ -32,13 +32,14 @@
                                     <li class="list-group-item">
                                         <%=userGuest.fullname%> | <%=userGuest.email%>
                                         <%if(infoUser.friendsRequest.includes(userGuest._id.toString())){%>
-                                            <a href="/user/add-friend/<%= userGuest._id %>">
-                                                <button type="submit" class="btn btn-danger btn-sm mt-2">Hoàn tác</button>
+                                            <br>
+                                            <a href="/user/remove-request/<%= userGuest._id %>">
+                                                <button type="button" class="btn btn-danger btn-sm mt-2">Hoàn tác</button>
                                             </a>
                                         <%}else{%>
                                             <br>
                                             <a href="/user/add-friend/<%= userGuest._id %>">
-                                                <button type="submit" class="btn btn-primary btn-sm mt-2">Kết bạn</button>
+                                                <button type="button" class="btn btn-primary btn-sm mt-2">Kết bạn</button>
                                             </a>
                                         <%}%>
                                     </li>
@@ -46,10 +47,29 @@
                             </ul>
                         <%}%>
                     <%}%>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title">Danh sách yêu cầu</h5>
+                    </div>
+                    <%if(infoUser.guestRequest){%>
+                        <%if(infoUser.guestRequest.length > 0){%>
+                            <ul class="list-group list-group-flush">
+                                <%infoUser.guestRequest.forEach(userGuest =>{%>
+                                    <li class="list-group-item">
+                                        <%=userGuest.fullname%> | <%=userGuest.email%>
+                                    </li>
+                                <%})%>
+                            </ul>
+                        <%}else{%>
+                            <span style="padding: .75rem 1.25rem">Chưa có yêu cầu(0)</span>
+                        <%}%>
+                    <%}%>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-4"></div>
             <div class="col-md-4">
                 <div class="card" style="width: 18rem;">
                     <div class="card-header">
@@ -66,7 +86,6 @@
                             <span style="padding: .75rem 1.25rem">Chưa có bạn bè(0)</span>
                         <%}%>
                     <%}%>
-                    </ul>
                 </div>
             </div>
         </div>        

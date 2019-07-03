@@ -18,7 +18,10 @@ router.get('/info', async (req, res)=>{
         const {email} = req.session;
         if(!email) res.json({error: true, message: 'PERMISSION_DENIED'});
 
-        const infoUser = await USER_MODEL.findOne({email});
+        const infoUser = await USER_MODEL.findOne({email})
+            .populate('guestRequest')
+            .populate('friends');
+
         if(!infoUser) res.json({error: true, message: 'CANNOT_GET_USER'});
 
         /**
@@ -35,6 +38,58 @@ router.get('/info', async (req, res)=>{
         res.json({error: true, message: error.message});
     }
 });
+
+router.get('/add-friend/:userReceiveAddFriendID', async (req, res)=>{
+    try {
+        const {email} = req.session;
+        const {userReceiveAddFriendID} = req.params;
+
+        if(!ObjectId.isValid(userReceiveAddFriendID))
+            res.json({error: true, message: 'PARAM_INVALID'});
+        
+        let infoSenderAfterUpdate = await USER_MODEL.findOneAndUpdate({email}, {
+            $addToSet: { friendsRequest: userReceiveAddFriendID}
+        }, {new: true});
+
+        let infoReceiveAfterUpdate = await USER_MODEL.findByIdAndUpdate(userReceiveAddFriendID,{
+            $addToSet: { guestRequest: infoSenderAfterUpdate._id }
+        }, {new: true});
+
+        if(!infoSenderAfterUpdate || !infoReceiveAfterUpdate)
+            res.json({error: true, message: 'UPDATE_ERROR'});
+        
+        // res.json({ infoSender: infoSenderAfterUpdate, infoReceiver: infoReceiveAfterUpdate });
+        res.redirect('/user/info');
+
+    } catch (error) {
+        res.json({error: true, message: error.message});
+    }
+});
+
+router.get('/remove-request/:userReceiveRemoveRequestID', async (req, res) =>{
+    try {
+        let { email } = req.session;
+        let { userReceiveRemoveRequestID } = req.params;
+
+        if( !ObjectId.isValid( userReceiveRemoveRequestID ))
+            res.json({ error: true, message: 'PARAM_VALID' });
+        
+        let infoRemoverAfterUpdate = await USER_MODEL.findOneAndUpdate({ email }, {
+            $pull: { friendsRequest: userReceiveRemoveRequestID }
+        }, { new: true });
+
+        let infoReceiverRequestAfterUpdate = await USER_MODEL.findByIdAndUpdate(userReceiveRemoveRequestID, {
+            $pull: { guestRequest: infoRemoverAfterUpdate._id}
+        }, { new : true});
+
+        if( !infoRemoverAfterUpdate || !infoReceiverRequestAfterUpdate)
+            return res.json({ error: true, message: 'CANNOT_UPDATE' });
+
+        res.redirect('/user/info');
+    } catch (error) {
+        res.json({ error: true, message: error.message });
+    }
+})
 
 router.post('/register', async (req, res)=>{
     try {
@@ -78,32 +133,6 @@ router.post('/login', async (req, res)=>{
     }
 });
 
-router.get('/add-friend/:userReceiveAddFriendID', async (req, res)=>{
-    try {
-        const {email} = req.session;
-        const {userReceiveAddFriendID} = req.params;
-
-        if(!ObjectId.isValid(userReceiveAddFriendID))
-            res.json({error: true, message: 'PARAM_INVALID'});
-        
-        let infoSenderAfterUpdate = await USER_MODEL.findOneAndUpdate(email, {
-            $addToSet: { friendsRequest: userReceiveAddFriendID}
-        }, {new: true});
-
-        let infoReceiveAfterUpdate = await USER_MODEL.findByIdAndUpdate(userReceiveAddFriendID,{
-            $addToSet: { guestRequest: infoSenderAfterUpdate._id }
-        }, {new: true});
-
-        if(!infoSenderAfterUpdate || !infoReceiveAfterUpdate)
-            res.json({error: true, message: 'UPDATE_ERROR'});
-        
-        // res.json({ infoSender: infoSenderAfterUpdate, infoReceiver: infoReceiveAfterUpdate });
-        res.redirect('/user/info');
-
-    } catch (error) {
-        res.json({error: true, message: error.message});
-    }
-});
 
 
 exports.USER_ROUTTER = router;
