@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const {hash, compare} = require('bcrypt');
 
-const { USER_MODEL } = require('../models/user.model');
 const ObjectId = require('mongoose').Types.ObjectId;
+const { USER_MODEL } = require('../models/user.model');
+const UPLOAD_CONFIG  = require('../utils/multer-config');
 
 router.get('/', (req, res)=>{
     res.redirect('/user/login');
@@ -177,9 +178,10 @@ router.get('/remove-friend/:userBeRemoveID', async (req, res)=>{
     }
 });
 
-router.post('/register', async (req, res)=>{
+router.post('/register', UPLOAD_CONFIG.single('image'), async (req, res)=>{
     try {
         const { fullname, email, password} = req.body;
+        const { filename } = req.file;
 
         let isExist = await USER_MODEL.findOne({email});
         if(isExist) res.json({error: true, message: 'USER_IS_EXIST'});
@@ -187,7 +189,7 @@ router.post('/register', async (req, res)=>{
         let passHash = await hash(password, 8);
         if(!passHash) res.json({error: true, message: 'CANNOT_HASH_PASSWORD'});
 
-        let infoUser = new USER_MODEL({fullname, email, password: passHash});
+        let infoUser = new USER_MODEL({fullname, email, password: passHash, image: filename});
         let infoInserted = await infoUser.save();
 
         if(!infoInserted) res.json({error: true, message: 'CANNOT_INSERT_USER'});

@@ -9,6 +9,7 @@ const UsersSchema = new Schema({
      */
     email: { type: String, required: true, trim: true, unique: true},
     password: {type: String, required: true},
+    image: {type: String},
     /**
      * Users is friend
      */

@@ -18,6 +18,7 @@
                         <h5 class="card-title"><%=infoUser.fullname%></h5>
                     </div>
                     <div class="card-body">
+                        <img class="rounded-circle" src="/images/<%=infoUser.image%>" alt="image" height="64px">
                         <p class="card-text"><%=infoUser.email%></p>
                     </div>
                 </div>
@@ -34,6 +35,7 @@
                                     <%if(!arrObjIDFriends.includes(userGuest._id.toString()) && !arrObjIDGuestRequest.includes(userGuest._id.toString())){%>
                                         <li class="list-group-item">
                                             <%=userGuest.fullname%> | <%=userGuest.email%>
+                                            <img class="rounded-circle" src="/images/<%=userGuest.image%>" alt="image" height="64px">
                                             <%if(infoUser.friendsRequest.includes(userGuest._id.toString())){%>
                                                 <br>
                                                 <a class="btn btn-danger btn-sm mt-2" href="/user/remove-request/<%= userGuest._id %>">Hoàn tác</a>
@@ -61,6 +63,7 @@
                                 <%infoUser.guestRequest.forEach(userGuest =>{%>
                                     <li class="list-group-item">
                                         <%=userGuest.fullname%> | <%=userGuest.email%>
+                                        <img class="rounded-circle" src="/images/<%=userGuest.image%>" alt="image" height="64px">
                                         <br>
                                         <a class="btn btn-success btn-sm mt-2" href="/user/confirm-friend/<%= userGuest._id %>">Xác nhận</a>
                                         <a class="btn btn-warning btn-sm mt-2 ml-3" href="/user/decline-friend/<%= userGuest._id %>">Từ chối</a>
@@ -85,6 +88,7 @@
                                 <%infoUser.friends.forEach(userGuest =>{%>
                                     <li class="list-group-item">
                                         <%=userGuest.fullname%> | <%=userGuest.email%>
+                                        <img class="rounded-circle" src="/images/<%=userGuest.image%>" alt="image" height="64px">
                                         <br>
                                         <a class="btn btn-dark btn-sm mt-2" href="/user/remove-friend/<%= userGuest._id %>">Huỷ kết bạn</a>
                                     </li>
