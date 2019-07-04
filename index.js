@@ -7,7 +7,8 @@ const bodyParser     = require('body-parser');
 const expressSession = require('express-session');
 const {URI_MONGOOSE} = require('./constant/index');
 
-const {USER_ROUTTER} = require('./routers/user.router');
+const { USER_ROUTTER }  = require('./routers/user.router');
+const { POST_ROUTER }   = require('./routers/post.router');
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
@@ -26,6 +27,7 @@ app.use(expressSession({
 }));
 
 app.use('/user', USER_ROUTTER);
+app.use('/post', POST_ROUTER);
 
 app.get('/', (req, res)=>{
     res.redirect('/user/login');

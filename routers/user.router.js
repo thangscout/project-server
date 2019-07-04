@@ -5,6 +5,10 @@ const {hash, compare} = require('bcrypt');
 const { USER_MODEL } = require('../models/user.model');
 const ObjectId = require('mongoose').Types.ObjectId;
 
+router.get('/', (req, res)=>{
+    res.redirect('/user/login');
+});
+
 router.get('/register', (req, res)=>{
     res.render('register');
 });
@@ -214,4 +218,5 @@ router.post('/login', async (req, res)=>{
         res.json({error: true, message: error.message});
     }
 });
+
 exports.USER_ROUTTER = router;
