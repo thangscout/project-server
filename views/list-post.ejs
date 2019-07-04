@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>List post page</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <%if(listPost && listPost.length > 0) {%>
+                <%listPost.forEach(post => { %>
+                    <div class="col-md-4 mb-5">                
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title"><%=post.title%></h5>
+                                <p class="card-text"><%=post.description%></p>
+                                <a href="#" class="card-link">
+                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                </a>
+                                <a href="#" class="card-link">
+                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <%})%>
+            <%}%>
+        </div>        
+    </div>
+</body>
+</html>

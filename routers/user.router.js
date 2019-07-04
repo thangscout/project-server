@@ -213,7 +213,7 @@ router.post('/login', async (req, res)=>{
          */
         req.session.email = isExist.email;
         // res.json({error: false, message:'LOGIN_SUCCESS'});
-        res.redirect('info');
+        res.redirect('/');
     } catch (error) {
         res.json({error: true, message: error.message});
     }
