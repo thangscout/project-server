@@ -21,7 +21,7 @@ router.get('/login', (req, res)=>{
 router.get('/info', async (req, res)=>{
     try {
         const {email} = req.session;
-        if(!email) res.json({error: true, message: 'PERMISSION_DENIED'});
+        if(!email) res.redirect('/user/login');
 
         const infoUser = await USER_MODEL.findOne({email})
             .populate('guestRequest')
@@ -202,7 +202,7 @@ router.post('/register', UPLOAD_CONFIG.single('image'), async (req, res)=>{
 
 router.post('/login', async (req, res)=>{
     try {
-        const {fullname, email, password} = req.body;
+        const {email, password} = req.body;
 
         let isExist = await USER_MODEL.findOne({email});
         if(!isExist) res.json({error: true, message:'EMAIL_NOT_EXISTENCE'});

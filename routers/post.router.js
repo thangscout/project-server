@@ -48,6 +48,25 @@ router.get('/like/:postID', async (req, res)=>{
     }
 });
 
+router.get('/remove-like/:postID', async(req, res)=>{
+    try {
+        let { email } = req.session;
+        if(!email) res.redirect('/user/login');
+        let { postID } = req.params;
+
+        let infoUser = await USER_MODEL.findOne({ email });
+        let postAfterUpdate = await POST_MODEL.findByIdAndUpdate(postID, {
+            $pull: { liker: infoUser._id }
+        }, { new: true });
+
+        if(!infoUser || !postAfterUpdate)
+            res.json({ error: true, message: 'CANNOT_UPDATE_LIKE' });
+        res.redirect('/');
+    } catch (error) {
+        res.json({ error: true, message: error.message });
+    }
+})
+
 router.post('/new', async (req, res)=>{
     try {
         let { email } = req.session;

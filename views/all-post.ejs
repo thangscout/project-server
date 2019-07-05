@@ -23,19 +23,16 @@
                                 <h5 class="card-title"><%=post.title%></h5>
                                 <p class="card-text"><%=post.description%></p>
                                 <strong>#<%=post.author.fullname%></strong>
-                                <a href="/post/like/<%=post._id%>" class="card-link">
-                                    <!-- <%var arrObjLiker = post.liker.map(item => item._id.toString())%>
-                                    <%if(!arrObjLiker)%> -->
-                                    <%if(post.liker.includes(infoUser._id.toString())){%>
+                                <%if(post.liker.includes(infoUser._id.toString())){%>
+                                    <a href="/post/remove-like/<%=post._id%>" class="card-link">
                                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                    <%}else{%>
+                                    </a>
+                                <%}else{%>
+                                    <a href="/post/like/<%=post._id%>" class="card-link">
                                         <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-                                    <%}%>
-                                </a>
+                                    </a>
+                                <%}%>
                                 <span class="badge badge-info"><%=post.liker.length%></span>
-                                <!-- <a href="#" class="card-link">
-                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                </a> -->
                             </div>
                         </div>
                     </div>
