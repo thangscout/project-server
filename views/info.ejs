@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Info page</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
-    crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row">
+    <div class="container-fluid mt-5 mb-5">
+        <!-- <div class="row">
             <div class="col-md-4">
                 <div class="card" >
                     <div class="card-header">
@@ -111,7 +113,114 @@
                     <%}%>
                 </div>
             </div>
-        </div>        
+        </div> -->
+        <div class="row mt-5">
+            <div class="col-md-3">
+                    <div class="card" >
+                        <div class="card-header">
+                            <h5 class="card-title"><%=infoUser.fullname%></h5>
+                        </div>
+                        <div class="card-body">
+                            <img class="rounded-circle" src="/images/<%=infoUser.image%>" alt="image" height="64px">
+                            <p class="card-text"><%=infoUser.email%></p>
+                        </div>
+                    </div>
+                </div>
+            <div class="col-md-6">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Friends</a>
+                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Friend Request</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="" >
+                            <%if(listUser){%>
+                                <%if(listUser.length > 0){%>
+                                    <div class="list-group list-group-flush">
+                                        <%listUser.forEach(userGuest =>{%>
+                                            <%var arrObjIDFriends = infoUser.friends.map(item => item._id.toString())%>
+                                            <%var arrObjIDGuestRequest = infoUser.guestRequest.map(item => item._id.toString())%>
+                                            <%if(!arrObjIDFriends.includes(userGuest._id.toString()) && !arrObjIDGuestRequest.includes(userGuest._id.toString())){%>
+                                                <div class="list-group-item d-flex pt-3 pm-3">
+                                                    <div>
+                                                        <img class="rounded-circle" src="/images/<%=userGuest.image%>" alt="image" height="64px">
+                                                    </div> 
+                                                    <div class="ml-3">
+                                                        <%=userGuest.fullname%> <br> <%=userGuest.email%>
+                                                    </div>
+                                                    <div class="ml-auto">
+                                                        <%if(infoUser.friendsRequest.includes(userGuest._id.toString())){%>
+                                                            <a class="btn btn-danger btn-sm mt-2" href="/user/remove-request/<%= userGuest._id %>">Cancel</a>
+                                                        <%}else{%>
+                                                            <a class ="btn btn-primary btn-sm mt-2" href="/user/add-friend/<%= userGuest._id %>">Add Friend</a>
+                                                        <%}%>
+                                                    </div>
+                                                </div>
+                                            <%}%>                                    
+                                        <%})%>
+                                    </div>
+                                <%}%>
+                            <%}%>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <div>
+                            <%if(infoUser.guestRequest){%>
+                                <%if(infoUser.guestRequest.length > 0){%>
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item">You have <b><%= infoUser.guestRequest.length %></b> request.</div>
+                                        <%infoUser.guestRequest.forEach(userGuest =>{%>
+                                            <div class="list-group-item d-flex align-items-center justify-content-start">
+                                                <div>
+                                                    <img class="rounded-circle" src="/images/<%=userGuest.image%>" alt="image" height="64px">
+                                                </div>
+                                                <div class="ml-3">
+                                                    <%=userGuest.fullname%> <br> <%=userGuest.email%>
+                                                    <br>
+                                                    <a class="btn btn-success btn-sm mt-2" href="/user/confirm-friend/<%= userGuest._id %>">Confirm</a>
+                                                    <a class="btn btn-warning btn-sm mt-2 ml-3" href="/user/decline-friend/<%= userGuest._id %>">Refuse</a>
+                                                </div>                                        
+                                            </div>
+                                        <%})%>
+                                        </div>
+                                <%}else{%>
+                                    <span style="padding: .75rem 1.25rem">No request</span>
+                                <%}%>
+                            <%}%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">My Friends</h5>
+                    </div>
+                    <%if(infoUser.friends){%>
+                        <%if(infoUser.friends.length > 0){%>
+                            <div class="list-group list-group-flush">
+                                <%infoUser.friends.forEach(userGuest =>{%>
+                                    <div class="list-group-item d-flex align-items-center justify-content-start">
+                                        <div>
+                                            <img class="rounded-circle" src="/images/<%=userGuest.image%>" alt="image" height="64px">
+                                        </div>
+                                        <div class="ml-3">
+                                            <%=userGuest.fullname%> <br><%=userGuest.email%>
+                                            <br>
+                                            <a class="btn btn-dark btn-sm mt-2" href="/user/remove-friend/<%= userGuest._id %>">Unfriend</a>
+                                        </div>
+                                    </div>
+                                <%})%>
+                            </div>
+                        <%}else{%>
+                            <span style="padding: .75rem 1.25rem">Chưa có bạn bè</span>
+                        <%}%>
+                    <%}%>
+                </div>
+            </div>
+        </div>     
     </div>
 </body>
 </html>
